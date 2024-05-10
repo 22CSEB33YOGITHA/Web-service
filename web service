@@ -1,0 +1,33 @@
+//web service application
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+@Path("/product")
+public class ProductService {
+    @GET
+    @Path("/{productId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProductInfo(@PathParam("productId") int productId) {
+        String name = "Sample Product";
+        double price = 99.99;
+        String description = "This is a sample product description.";
+        String jsonResponse = "{\"name\": \"" + name + "\", \"price\": " + price + ", \"description\": \"" + description + "\"}";
+        return Response.ok(jsonResponse).build();
+    }
+}
+
+//web service client
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.MediaType;
+public class ProductClient {
+    public static void main(String[] args) {
+        Client client = ClientBuilder.newClient();
+        String url = "http://localhost:8080/product/123";
+        String jsonResponse = client.target(url)
+                .request(MediaType.APPLICATION_JSON)
+                .get(String.class);
+        System.out.println("Product Information:");
+        System.out.println(jsonResponse);
+        client.close();
+    }
+}
